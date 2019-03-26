@@ -1,0 +1,6 @@
+.idea
+/vendor
+/mysql/data
+/api/pkg
+/api/src
+/api/conf.json
