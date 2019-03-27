@@ -47,3 +47,20 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(helpers.SuccessResponse{Message: "A confirmation email has been sent."})
 	}
 }
+
+func ConfirmEmailByToken(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body",
+			http.StatusInternalServerError)
+	}
+	results = append(results, string(body))
+
+	data := []byte(results[0])
+	u := &entities.User{}
+	json.Unmarshal(data, u)
+
+	services.CheckToken(u.ConfirmToken)
+}

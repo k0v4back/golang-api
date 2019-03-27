@@ -2,8 +2,8 @@ package services
 
 import (
 	"../entities"
-	"../repositories"
 	"../helpers"
+	"../repositories"
 	"errors"
 	"log"
 	"time"
@@ -47,6 +47,26 @@ func CheckUnicEmail (Email string) error {
 	for _, v := range value {
 		if v.Email == Email {
 			return errors.New("this email already exist")
+		}
+	}
+	return nil
+}
+
+
+func CheckToken (Token string) error {
+	value, err := repositories.GetAllUsers()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, v := range value {
+		if v.ConfirmToken == Token && v.ConfirmTokenExpire > int(time.Now().Unix()) {
+			Status := entities.ACTIVE
+			_, err := repositories.UpdateUserById(v.Id, Status, v.Username, v.Nick)
+			if err != nil {
+				return err
+			}
+			return nil
 		}
 	}
 	return nil

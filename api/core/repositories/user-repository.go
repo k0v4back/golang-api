@@ -54,8 +54,10 @@ func GetUserById(Id int) (*entities.User, error) {
 }
 
 
-func UpdateUserById(Id int, Username, Nick string) (*entities.User, error) {
-	_, err := database.Exec("UPDATE test_db.user set username = ?, nick = ? where id = ?", Username, Nick, Id)
+func UpdateUserById(Id, Status int, Username, Nick string) (*entities.User, error) {
+	db, err := sql.Open("mysql", "docker:docker@tcp(db:3306)/test_db")
+
+	_, err = db.Exec("UPDATE test_db.user set username = ?, nick = ?, status = ? where id = ?", Username, Nick, Status, Id)
 	if err != nil {
 		log.Fatal(err)
 	}

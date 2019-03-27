@@ -14,6 +14,7 @@ func main()  {
 	r.HandleFunc("/", controllers.MainPage).Methods("GET")
 	r.HandleFunc("/all-users", controllers.GetAllUsers).Methods("GET")
 	r.HandleFunc("/user-register", controllers.UserRegister).Methods("POST")
+	r.HandleFunc("/confirm-email", controllers.ConfirmEmailByToken).Methods("POST")
 
 	fmt.Println("Listen port 8080")
 
