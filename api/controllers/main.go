@@ -43,5 +43,7 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 
 	if services.RegisterUser(u.Password, u.Email) != nil {
 		json.NewEncoder(w).Encode(helpers.ErrorResponse{Error: "Invalid email address or this email already exist"})
+	}else {
+		json.NewEncoder(w).Encode(helpers.SuccessResponse{Message: "A confirmation email has been sent."})
 	}
 }
