@@ -3,8 +3,7 @@ package services
 import (
 	"../entities"
 	"../repositories"
-	"crypto/sha1"
-	"encoding/base64"
+	"../helpers"
 	"errors"
 	"log"
 	"time"
@@ -15,10 +14,9 @@ func GetAllUsers() ([]*entities.User, error) {
 }
 
 func RegisterUser(Password, Email string) error {
-	hash := sha1.New()
 
 	CreatedAt := int(time.Now().Unix())
-	ConfirmToken := base64.URLEncoding.EncodeToString(hash.Sum(nil))
+	ConfirmToken := helpers.RandStringRunes(6)
 	ConfirmTokenExpire := int(time.Now().Unix()) + 3600
 	Status := entities.IS_WAITING
 
@@ -29,6 +27,13 @@ func RegisterUser(Password, Email string) error {
 	}
 
 	repositories.CreateUser(CreatedAt, ConfirmToken, ConfirmTokenExpire, Status, Password, Email)
+
+	FromEmail := helpers.GetEmail()
+	FromPassword := helpers.GetEmailPassword()
+	ToEmail := Email
+	Subject := "Confirm email by token"
+	Body := "Confirm token: " + ConfirmToken
+	helpers.SendEmail(FromEmail, FromPassword, ToEmail, Subject, Body)
 
 	return nil
 }
