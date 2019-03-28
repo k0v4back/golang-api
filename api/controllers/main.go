@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -62,5 +63,9 @@ func ConfirmEmailByToken(w http.ResponseWriter, r *http.Request) {
 	u := &entities.User{}
 	json.Unmarshal(data, u)
 
-	services.CheckToken(u.ConfirmToken)
+	e := services.CheckToken(u.ConfirmToken)
+	//_, e := services.CheckToken(u.ConfirmToken)
+	if e != nil {
+		log.Fatal(err)
+	}
 }

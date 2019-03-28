@@ -6,15 +6,16 @@ import (
 	"log"
 	"net/http"
 	"./controllers"
+	"../api/core/helpers"
 )
 
 func main()  {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", controllers.MainPage).Methods("GET")
-	r.HandleFunc("/all-users", controllers.GetAllUsers).Methods("GET")
-	r.HandleFunc("/user-register", controllers.UserRegister).Methods("POST")
-	r.HandleFunc("/confirm-email", controllers.ConfirmEmailByToken).Methods("POST")
+	r.HandleFunc("/", helpers.JsonMiddleware(controllers.MainPage)).Methods("GET")
+	r.HandleFunc("/all-users", helpers.JsonMiddleware(controllers.GetAllUsers)).Methods("GET")
+	r.HandleFunc("/user-register", helpers.JsonMiddleware(controllers.UserRegister)).Methods("POST")
+	r.HandleFunc("/confirm-email", helpers.JsonMiddleware(controllers.ConfirmEmailByToken)).Methods("POST")
 
 	fmt.Println("Listen port 8080")
 
